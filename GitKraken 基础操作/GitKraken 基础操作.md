@@ -1,6 +1,8 @@
 # **GitKraken 基础操作**
 
-> [@YuanXiQWQ](https://github.com/YuanXiQWQ) 本文仅为个人经验，仅供参考
+> GitKraken 常用基础操作 by [@YuanXiQWQ](https://github.com/YuanXiQWQ)
+> 
+> 本文仅为个人经验，仅供参考
 
 # **名词**
 
@@ -55,10 +57,7 @@
 
 在检出的提交创建分支（通过右键还可以在某个特定提交创建分支）
 
-## *
-
-*![][image14][贮藏（Stash）](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E8%B4%AE%E8%97%8F%E4%B8%8E%E6%B8%85%E7%90%86)
-**
+## **![][image14][贮藏（Stash）](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E8%B4%AE%E8%97%8F%E4%B8%8E%E6%B8%85%E7%90%86)**
 
 若当前已有未暂存的文件，想要切换到分支而不提交当前已修改内容，则可使用贮藏。
 
@@ -131,7 +130,7 @@
 
 ## **将 xxx 合并到 xxx**
 
-考虑如下情型：  
+考虑如下情形：  
 ![][image25]  
 要将分支2的改动添加到分支1，可以选择合并（Merge）
 
@@ -157,11 +156,9 @@
 
 ![][image30]
 
-## [**交互式变基（Interactive Rebase）
+## **[交互式变基（Interactive Rebase）](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2.html#_changing_multiple)**
 
-**](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2.html#_changing_multiple)
-
-考虑如下情型：  
+考虑如下情形：  
 ![][image31]
 
 * 多余的提交想要丢弃
@@ -188,10 +185,7 @@
 或者从右侧提交详情处修改提交信息  
 ![][image37]
 
-## [**拣选（Cherry Pick）
-
-**](https://git-scm.com/book/zh/v2/%e5%88%86%e5%b8%83%e5%bc%8f-Git-%e7%bb%b4%e6%8a%a4%e9%a1%b9%e7%9b%ae#_rebase_cherry_pick)
-**提交**
+## **[拣选（Cherry Pick）](https://git-scm.com/book/zh/v2/%e5%88%86%e5%b8%83%e5%bc%8f-Git-%e7%bb%b4%e6%8a%a4%e9%a1%b9%e7%9b%ae#_rebase_cherry_pick)提交**
 
 考虑如下情形：  
 ![][image38]  
@@ -287,10 +281,7 @@ Commit 的大字和小字
 
 ---
 
-# *
-
-*![][image49][冲突（Conflict）](https://docs.github.com/zh/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/about-merge-conflicts)
-**
+# **![][image49][冲突（Conflict）](https://docs.github.com/zh/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/about-merge-conflicts)**
 
 当对文件的同一行进行竞争更改时，或者当一个人编辑文件而另一个人删除同一文件时，会发生合并冲突。常见于：
 

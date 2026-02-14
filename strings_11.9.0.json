@@ -999,7 +999,7 @@
     "ContextMenu-PushXToY": "将 {0} 推送到 {1}",
     "ContextMenu-RebaseBranchOntoBranch": "将分支 {0} 变基到分支 {1}",
     "ContextMenu-RebaseBranchOntoBranchInteractively": "交互式将分支 {0} 变基到分支 {1}",
-    "ContextMenu-RebaseXChildrenOfShaInteractively": "交互式变基 {0} 的子提交到 {1}",
+    "ContextMenu-RebaseXChildrenOfShaInteractively": "交互式变基 {0} 个子提交到 {1}",
     "ContextMenu-GenerateCommitRebaseXChildrenOfSha": "使用 AI 重新编写 {0} 个 {1} 的子提交（预览）",
     "ContextMenu-RefNotDisplayed": "还有 {0} 个引用未显示",
     "ContextMenu-RemoveRemote": "移除 {0}",

@@ -18,6 +18,7 @@ GitKraken的中文汉化补丁
 |       日期        | 更新内容                                                                          |                                                               感谢                                                               |
 |:---------------:|-------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------:|
 | 2024.02.27 - 现在 | 适配 9.12.0+ 版本。                                                                |                                           [@YuanXiQWQ](https://github.com/YuanXiQWQ)                                           |
+|   2026.02.14    | 编写文档[GitKraken 基础操作](./GitKraken%20基础操作/GitKraken%20基础操作.md)                  |                                           [@YuanXiQWQ](https://github.com/YuanXiQWQ)                                           |
 |   2025.10.15    | 创建自动释放工作流                                                                     |                                           [@YuanXiQWQ](https://github.com/YuanXiQWQ)                                           |
 |   2025.08.08    | 优化 OpenAI 与 DeepSeek 的提示词，更新固定翻译词汇表。                                          |                                           [@YuanXiQWQ](https://github.com/YuanXiQWQ)                                           |
 |   2025.07.08    | API 错误将返回具体的错误类型，将大部分弹窗改为界面消息                                                 |                                           [@YuanXiQWQ](https://github.com/YuanXiQWQ)                                           |
@@ -45,7 +46,8 @@ GitKraken的中文汉化补丁
 
 通过修改软件目录下 English 语言对应的一个 JSON 文件内容来完成汉化目的。
 
-（自动生成 JSON 工具已实现自动翻译。因 有道、OpenAI 和 DeepSeek 的 API 属于收费接口，故不提供 Key，有需要者请自行申请。申请方法详见 `comparator.html` - 使用说明）
+（自动生成 JSON 工具已实现自动翻译。因 有道、OpenAI 和 DeepSeek 的 API 属于收费接口，故不提供 Key，有需要者请自行申请。申请方法详见
+`comparator.html` - 使用说明）
 
 ## 操作步骤
 
@@ -56,7 +58,9 @@ GitKraken的中文汉化补丁
 从项目根目录或 `./旧版本文件` 中找到与你当前 GitKraken 版本匹配的 `.json` 文件，将其重命名为 `strings.json`，并替换
 GitKraken 安装目录下的 `strings.json` 文件。该文件的位置根据你的操作系统有所不同：
 
-#### <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Windows_logo_-_2012.svg/1280px-Windows_logo_-_2012.svg.png" alt="Windows Icon" style="width: 18px; height: 18px;"> Windows （`x.x.x` 表示 GitKraken 版本号）
+#### <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Windows_logo_-_2012.svg/1280px-Windows_logo_-_2012.svg.png" alt="Windows Icon" style="width: 18px; height: 18px;"> Windows （
+
+`x.x.x` 表示 GitKraken 版本号）
 
 - `%程序安装目录%\gitkraken\app-x.x.x\resources\app\src\strings.json`
 - `%程序安装目录%\gitkraken\app-x.x.x\resources\app.asar.unpacked\src\strings.json`

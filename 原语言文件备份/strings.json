@@ -663,6 +663,7 @@
     "LeftPanel-WorkflowView": "Agents",
     "AgentWorkflow-AgentStatusAwaitingApproval": "Awaiting approval",
     "AgentWorkflow-AgentStatusError": "Error",
+    "AgentWorkflow-AgentStatusRunning": "Running",
     "AgentWorkflow-AgentStatusNeedsResponse": "Needs response",
     "AgentWorkflow-AgentStatusThinking": "Thinking",
     "AgentWorkflow-AgentStatusUsingTool": "Using tool",
@@ -2137,6 +2138,8 @@
     "OnboardingTutorial-Tip-NotForYou": "Not for you? {0}",
     "OnboardingTutorial-Tip-TurnOffAi": "Turn off AI",
 
+    "Annotation-GitKrakenReview-Title": "GitKraken Code Review is now in preview!",
+    "Annotation-GitKrakenReview-Description": "Review PRs faster with cleaner diffs, AI-generated suggestions, and integrated chat \u2014 approve and comment just like on GitHub.",
     "Annotation-PinnedBranch-Name": "Pin a branch to the left",
     "Annotation-PinnedBranch-Description": "Right-click any local branch and select 'Pin to Left' to keep it in the leftmost column of the graph.",
 
@@ -2828,6 +2831,9 @@
 
     "PromptForRemoveWorktree-RemoveWorktreeRequiresForce": "Removing this worktree requires force, which is destructive and cannot be undone. Do you want to complete the removal?",
 
+    "PromptForRemoveWorktreeAndDeleteBranch-Confirm": "Remove and Delete",
+    "PromptForRemoveWorktreeAndDeleteBranch-Message": "This will permanently remove the worktree at '{0}' and delete the local branch '{1}'. This action cannot be undone.",
+
     "PromptForTagAnnotation-Message": "Message:",
     "PromptForTagAnnotation-Placeholder": "Annotation message",
 
@@ -3488,6 +3494,7 @@
     "Error-RenameFailed": "Rename Failed",
     "Error-RenameNeedsLocalBranch": "A local branch must be checked out!",
     "Error-RemoveFailed": "Failed to remove files",
+    "Error-DeleteBranchAfterWorktreeRemovalFailed": "Worktree was removed but deleting branch {0} failed",
     "Error-RemoveWorktreeFailed": "Failed to remove worktree",
     "Error-ResetFailed": "Reset Failed",
     "Error-ResetSubmodulesFailedSummarySingular": "Failed to reset {0} submodule: {1}{2}",
@@ -3878,6 +3885,7 @@
     "PullRequestView-SubmitReview": "Submit Review",
     "PullRequestView-ReviewCodeSuggestChanges": "Review Code and Suggest Changes",
     "PullRequestView-ReviewCodeSuggestChangesContextMenu": "Review code && suggest changes",
+    "PullRequestView-ReviewOnGitKrakenDev": "Review on GitKraken.dev",
     "PullRequestView-ViewOnlyPermissionMessage": "You do not have permission to edit this pull request.",
     "PullRequestView-WaitingForAReviewFromX": "Waiting for review from {0}",
     "PullRequestView-WikiRepoMessage": "Pull requests are not supported for wiki repositories.",
@@ -4239,6 +4247,10 @@
     "TerminalContextMenu-DeleteLine": "Delete Line",
     "TerminalContextMenu-Clear": "Clear",
     "TerminalContextMenu-CloseTerminal": "Close Terminal",
+    "TerminalToolbar-Expand": "Expand Terminal",
+    "TerminalToolbar-HideTerminal": "Hide Terminal",
+    "TerminalToolbar-KillTerminal": "Kill Terminal",
+    "TerminalToolbar-Minimize": "Minimize Terminal",
 
     "Workspace": "Workspace",
     "Workspaces": "Workspaces",
@@ -5665,6 +5677,7 @@
     "Worktree-OpenInNewTabButtonLabel": "Open in New Tab",
     "Worktree-FormPrune": "Prune worktrees",
     "Worktree-FormRemove": "Remove this worktree",
+    "Worktree-FormRemoveAndDeleteBranch": "Remove worktree and delete branch",
     "Worktree-FormUnlock": "Unlock this worktree",
     "Worktree-FormWorkdir": "Working directory",
     "Worktree-FormWorktreeBranch": "Worktree branch to create",
@@ -5682,9 +5695,10 @@
 
     "AgentWorkflow-NewSession": "New Agent Session",
     "AgentWorkflow-BranchNamePlaceholder": "Branch name",
+    "AgentWorkflow-StartAgentSession": "Start an agent session",
+    "AgentWorkflow-StartSession": "Start Session",
     "AgentWorkflow-Start": "Start",
     "AgentWorkflow-Cancel": "Cancel",
-    "AgentWorkflow-Options": "Options",
     "AgentWorkflow-BaseBranch": "Base branch",
     "AgentWorkflow-CodingAgent": "Coding agent",
     "AgentWorkflow-ConfigureSetupCommands": "Configure setup commands",

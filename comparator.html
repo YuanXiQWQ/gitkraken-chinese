@@ -5,1013 +5,1013 @@
 <html lang="zh-CN">
 
 <head>
-  <title>自动翻译脚本</title>
+ <title>自动翻译脚本</title>
 
-  <!-- ==== 元数据 ==== -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+ <!-- ==== 元数据 ==== -->
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- ==== 脚本库 ==== -->
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.0.0/crypto-js.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ <!-- ==== 脚本库 ==== -->
+ <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.0.0/crypto-js.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-  <!-- ==== 其他库 ==== -->
-  <link rel="icon" type="image/x-icon"
-        href="https://upload.wikimedia.org/wikipedia/commons/d/db/Google_Translate_Icon.png?20160129085523">
+ <!-- ==== 其他库 ==== -->
+ <link rel="icon" type="image/x-icon"
+       href="https://upload.wikimedia.org/wikipedia/commons/d/db/Google_Translate_Icon.png?20160129085523">
 
-  <!-- ==== 样式 ==== -->
-  <style>
-    body{
-      font-family: 'Arial', sans-serif;
-    }
+ <!-- ==== 样式 ==== -->
+ <style>
+     body {
+         font-family: 'Arial', sans-serif;
+     }
 
-    li{
-      list-style: none;
-    }
+     li {
+         list-style: none;
+     }
 
-    fieldset{
-      padding: 0.5em;
-      margin: 1px;
-    }
+     fieldset {
+         padding: 0.5em;
+         margin: 1px;
+     }
 
-    button:hover{
-      cursor: pointer;
-    }
+     button:hover {
+         cursor: pointer;
+     }
 
-    header{
-      height: 32px;
-    }
+     header {
+         height: 32px;
+     }
 
-    .header-anchor{
-      display: inline-block;
-      padding: 0;
-      margin: 0;
-      height: 100%;
-    }
+     .header-anchor {
+         display: inline-block;
+         padding: 0;
+         margin: 0;
+         height: 100%;
+     }
 
-    .header-anchor-logo{
-      display: inline-block;
-      padding: 1px;
-      height: 30px;
-    }
+     .header-anchor-logo {
+         display: inline-block;
+         padding: 1px;
+         height: 30px;
+     }
 
-    .APIConfig{
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
+     .APIConfig {
+         display: flex;
+         flex-direction: column;
+         gap: 5px;
+     }
 
-    .input-group{
-      display: flex;
-      align-items: center;
-      margin-bottom: 4px;
-    }
+     .input-group {
+         display: flex;
+         align-items: center;
+         margin-bottom: 4px;
+     }
 
-    .input-group label{
-      width: 230px;
-      margin-right: 10px;
-    }
+     .input-group label {
+         width: 230px;
+         margin-right: 10px;
+     }
 
-    .APIConfig button{
-      width: 200px;
-    }
+     .APIConfig button {
+         width: 200px;
+     }
 
-    .selectForm{
-      width: 15em;
-      box-sizing: border-box;
-    }
+     .selectForm {
+         width: 15em;
+         box-sizing: border-box;
+     }
 
-    #introduction{
-      background-color: #F5F5F5;
-      padding: 0.5em;
-    }
+     #introduction {
+         background-color: #F5F5F5;
+         padding: 0.5em;
+     }
 
-    .introduction-list,
-    .introduction-list-li{
-      padding: 0;
-      margin: 0 0 0 4px;
-      list-style: decimal;
-    }
+     .introduction-list,
+     .introduction-list-li {
+         padding: 0;
+         margin: 0 0 0 4px;
+         list-style: decimal;
+     }
 
-    .operation{
-      min-height: 75vh;
-      display: grid;
-      grid-template-columns: 3fr 1fr;
-    }
+     .operation {
+         min-height: 75vh;
+         display: grid;
+         grid-template-columns: 3fr 1fr;
+     }
 
-    #console{
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+     #console {
+         display: flex;
+         flex-direction: column;
+         gap: 4px;
+     }
 
-    .console-btns{
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-bottom: 4px;
-      height: 2em;
-    }
+     .console-btns {
+         display: grid;
+         grid-template-columns: repeat(2, 1fr);
+         gap: 8px;
+         margin-bottom: 4px;
+         height: 2em;
+     }
 
-    .console-inputs{
-      display: flex;
-      align-items: center;
-      margin-bottom: 4px;
-    }
+     .console-inputs {
+         display: flex;
+         align-items: center;
+         margin-bottom: 4px;
+     }
 
-    #console-textarea{
-      flex: 1;
-      overflow: auto;
-    }
+     #console-textarea {
+         flex: 1;
+         overflow: auto;
+     }
 
-    #sp{
-      margin-right: 6px;
-    }
+     #sp {
+         margin-right: 6px;
+     }
 
-    #textJson{
-      width: 100%;
-      height: 95%;
-      overflow: auto;
-      margin-top: 10px;
-      resize: none;
-      padding: 4px;
-      box-sizing: border-box;
-    }
+     #textJson {
+         width: 100%;
+         height: 95%;
+         overflow: auto;
+         margin-top: 10px;
+         resize: none;
+         padding: 4px;
+         box-sizing: border-box;
+     }
 
-    summary{
-      font-weight: bold;
-      cursor: pointer;
-    }
+     summary {
+         font-weight: bold;
+         cursor: pointer;
+     }
 
-    .diff-green{
-      color: green;
-    }
+     .diff-green {
+         color: green;
+     }
 
-    .diff-red{
-      color: red;
-    }
+     .diff-red {
+         color: red;
+     }
 
-    .diff-blue{
-      color: blue;
-    }
+     .diff-blue {
+         color: blue;
+     }
 
-    .error-message{
-      margin-left: 10px;
-      color: red;
-      font-weight: bold;
-    }
+     .error-message {
+         margin-left: 10px;
+         color: red;
+         font-weight: bold;
+     }
 
-    .save-message{
-      margin-left: 10px;
-      font-weight: bold;
-    }
+     .save-message {
+         margin-left: 10px;
+         font-weight: bold;
+     }
 
-    .save-message.success{
-      color: green;
-    }
+     .save-message.success {
+         color: green;
+     }
 
-    .save-message.error{
-      color: red;
-    }
+     .save-message.error {
+         color: red;
+     }
 
-    @media (max-width: 1001px){
-      .operation{
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-      }
-    }
-  </style>
+     @media (max-width: 1001px) {
+         .operation {
+             display: grid;
+             grid-template-columns: 2fr 1fr;
+         }
+     }
+ </style>
 </head>
 
 <body>
-  <header class="header">
-    <a class="header-anchor" href="https://github.com/yk47g/gitkraken-chinese" target="_blank">
-      <img class="header-anchor-logo" src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
-           alt="关于我们的 GitHub 项目">
-    </a>
-  </header>
-  <div id="app">
-    <form @submit.prevent="saveKeys">
-      <fieldset class="APIConfig">
-        <legend>API 配置</legend>
+<header class="header">
+ <a class="header-anchor" href="https://github.com/yk47g/gitkraken-chinese" target="_blank">
+  <img class="header-anchor-logo" src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
+       alt="关于我们的 GitHub 项目">
+ </a>
+</header>
+<div id="app">
+ <form @submit.prevent="saveKeys">
+  <fieldset class="APIConfig">
+   <legend>API 配置</legend>
 
-        <!-- 下拉菜单选择 API -->
-        <div class="input-group">
-          <label for="apiSelector">选择翻译 API：</label>
-          <select id="apiSelector" v-model="selectedApi" class="selectForm">
-            <option value="openai">OpenAI</option>
-            <option value="deepseek">DeepSeek</option>
-            <option value="youdao">有道智云</option>
-          </select>
-        </div>
+   <!-- 下拉菜单选择 API -->
+   <div class="input-group">
+    <label for="apiSelector">选择翻译 API：</label>
+    <select id="apiSelector" v-model="selectedApi" class="selectForm">
+     <option value="openai">OpenAI</option>
+     <option value="deepseek">DeepSeek</option>
+     <option value="youdao">有道智云</option>
+    </select>
+   </div>
 
-        <!-- OpenAI API 配置 -->
-        <div v-if="selectedApi === 'openai'">
-          <div class="input-group">
-            <label for="openaiApiKey">OpenAI API 密钥：</label>
-            <input type="text" id="openaiApiKey" v-model="openai.apiKey" placeholder="sk-" class="selectForm">
-          </div>
-          <div class="input-group">
-            <label for="modelSelector">选择模型：</label>
-            <select id="modelSelector" v-model="openai.model" class="selectForm">
-              <option value="gpt-4o-mini">4o-mini</option>
-              <option value="gpt-4o">4o</option>
-            </select>
-          </div>
-        </div>
+   <!-- OpenAI API 配置 -->
+   <div v-if="selectedApi === 'openai'">
+    <div class="input-group">
+     <label for="openaiApiKey">OpenAI API 密钥：</label>
+     <input type="text" id="openaiApiKey" v-model="openai.apiKey" placeholder="sk-" class="selectForm">
+    </div>
+    <div class="input-group">
+     <label for="modelSelector">选择模型：</label>
+     <select id="modelSelector" v-model="openai.model" class="selectForm">
+      <option value="gpt-4o-mini">4o-mini</option>
+      <option value="gpt-4o">4o</option>
+     </select>
+    </div>
+   </div>
 
-        <!-- DeepSeek API 配置 -->
-        <div v-if="selectedApi === 'deepseek'">
-          <div class="input-group">
-            <label for="deepseekApiKey">DeepSeek API 密钥：</label>
-            <input type="text" id="deepseekApiKey" v-model="deepseek.apiKey" placeholder="sk-"
-                   class="selectForm">
-          </div>
-          <div class="input-group">
-            <label for="deepseekModel">选择模型：</label>
-            <select id="deepseekModel" v-model="deepseek.model" class="selectForm">
-              <option value="deepseek-chat">V3</option>
-              <option value="deepseek-reasoner">R1</option>
-            </select>
-          </div>
-        </div>
+   <!-- DeepSeek API 配置 -->
+   <div v-if="selectedApi === 'deepseek'">
+    <div class="input-group">
+     <label for="deepseekApiKey">DeepSeek API 密钥：</label>
+     <input type="text" id="deepseekApiKey" v-model="deepseek.apiKey" placeholder="sk-"
+            class="selectForm">
+    </div>
+    <div class="input-group">
+     <label for="deepseekModel">选择模型：</label>
+     <select id="deepseekModel" v-model="deepseek.model" class="selectForm">
+      <option value="deepseek-chat">V3</option>
+      <option value="deepseek-reasoner">R1</option>
+     </select>
+    </div>
+   </div>
 
-        <!-- 有道 API 配置 -->
-        <div v-if="selectedApi === 'youdao'">
-          <div class="input-group">
-            <label for="appKey">有道 AppKey：</label>
-            <input type="text" id="appKey" v-model="youdao.appKey" placeholder="应用 ID" class="selectForm">
-          </div>
-          <div class="input-group">
-            <label for="appSecret">有道 AppSecret：</label>
-            <input type="text" id="appSecret" v-model="youdao.appSecret" placeholder="应用密钥"
-                   class="selectForm">
-          </div>
-        </div>
+   <!-- 有道 API 配置 -->
+   <div v-if="selectedApi === 'youdao'">
+    <div class="input-group">
+     <label for="appKey">有道 AppKey：</label>
+     <input type="text" id="appKey" v-model="youdao.appKey" placeholder="应用 ID" class="selectForm">
+    </div>
+    <div class="input-group">
+     <label for="appSecret">有道 AppSecret：</label>
+     <input type="text" id="appSecret" v-model="youdao.appSecret" placeholder="应用密钥"
+            class="selectForm">
+    </div>
+   </div>
 
-        <div class="input-group">
-          <button type="submit">保存</button>
-          <span v-if="saveMessage" :class="['save-message', saveMessageType]">
+   <div class="input-group">
+    <button type="submit">保存</button>
+    <span v-if="saveMessage" :class="['save-message', saveMessageType]">
             {{ saveMessage }}
           </span>
-        </div>
-      </fieldset>
-    </form>
+   </div>
+  </fieldset>
+ </form>
 
-    <div class="operation">
-      <fieldset id="console">
-        <legend>控制台</legend>
-        <div class="console-btns">
-          <button type="button" @click="compare">对比</button>
-          <button type="button" @click="autoTranslate">自动翻译</button>
-        </div>
+ <div class="operation">
+  <fieldset id="console">
+   <legend>控制台</legend>
+   <div class="console-btns">
+    <button type="button" @click="compare">对比</button>
+    <button type="button" @click="autoTranslate">自动翻译</button>
+   </div>
 
-        <!-- API 错误信息  -->
-        <div v-if="errorMsg" class="error-message">
-          {{ errorMsg }}
-        </div>
+   <!-- API 错误信息  -->
+   <div v-if="errorMsg" class="error-message">
+    {{ errorMsg }}
+   </div>
 
-        <!-- 上传旧版英文文件 -->
-        <div class="console-inputs">
-          <label for="oldEnFile">上传旧版英文文件：</label>
-          <input type="file" id="oldEnFile" @change="loadFile('oldEN')">
-          <span v-if="showOldEnError" class="error-message">
+   <!-- 上传旧版英文文件 -->
+   <div class="console-inputs">
+    <label for="oldEnFile">上传旧版英文文件：</label>
+    <input type="file" id="oldEnFile" @change="loadFile('oldEN')">
+    <span v-if="showOldEnError" class="error-message">
           需要上传旧版英文文件。
           </span>
-        </div>
+   </div>
 
-        <!-- 上传新版英文文件 -->
-        <div class="console-inputs">
-          <label for="newEnFile">上传新版英文文件：</label>
-          <input type="file" id="newEnFile" @change="loadFile('newEn')">
-          <span v-if="showNewEnError" class="error-message">
+   <!-- 上传新版英文文件 -->
+   <div class="console-inputs">
+    <label for="newEnFile">上传新版英文文件：</label>
+    <input type="file" id="newEnFile" @change="loadFile('newEn')">
+    <span v-if="showNewEnError" class="error-message">
             需要上传新版英文文件。
           </span>
-        </div>
+   </div>
 
-        <!-- 上传旧版中文文件 -->
-        <div class="console-inputs">
-          <label for="oldZhFile">上传旧版翻译文件：</label>
-          <input type="file" id="oldZhFile" @change="loadFile('oldZh')">
-          <span v-if="showOldZhError" class="error-message">
+   <!-- 上传旧版中文文件 -->
+   <div class="console-inputs">
+    <label for="oldZhFile">上传旧版翻译文件：</label>
+    <input type="file" id="oldZhFile" @change="loadFile('oldZh')">
+    <span v-if="showOldZhError" class="error-message">
             需要上传旧版翻译文件。
           </span>
-        </div>
+   </div>
 
-        <div id="console-textarea">
-          <label for="textJson" hidden="hidden">JSON 输出</label>
-          <textarea id="textJson"></textarea>
-        </div>
+   <div id="console-textarea">
+    <label for="textJson" hidden="hidden">JSON 输出</label>
+    <textarea id="textJson"></textarea>
+   </div>
 
-        <div class="console-btns">
-          <button type="button" @click="exportJson">导出JSON文件</button>
-          <button type="button" @click="copyToClipboard">复制到剪切板</button>
-        </div>
-      </fieldset>
+   <div class="console-btns">
+    <button type="button" @click="exportJson">导出JSON文件</button>
+    <button type="button" @click="copyToClipboard">复制到剪切板</button>
+   </div>
+  </fieldset>
 
-      <fieldset id="introduction">
-        <legend>使用说明</legend>
-        <b>对于有提供支持的 API 的用户：</b>
-        <ol class="introduction-list">
-          <li class="introduction-list-li">
-            填写 API 配置并保存。
-          </li>
-          <li class="introduction-list-li">
-            上传旧版英文文件（./原语言文件备份/strings.json），新版英文文件（具体位置见 ./README.md 中要替换的语言文件位置）
-            和旧版翻译文件（./strings_x.x.x.json）并点击 [对比] 按钮得到差异内容。
-          </li>
-          <li class="introduction-list-li">
-            点击 [自动翻译] 按钮翻译并等待弹出“翻译完成”提示框。
-          </li>
-          <li class="introduction-list-li">
-            导出并覆盖 strings.json 文件。
-          </li>
-          <li class="introduction-list-li">
-            重启 GitKraken。
-          </li>
-        </ol>
-        <b>对于没有 API 的用户：</b>
-        <ol class="introduction-list">
-          <li class="introduction-list-li">
-            上传旧版英文文件（./原语言文件备份/strings.json），新版英文文件（具体位置见 ./README.md 中要替换的语言文件位置）
-            和旧版翻译文件（./strings_x.x.x.json）并点击 [对比] 按钮得到差异内容。
-          </li>
-          <li class="introduction-list-li">
-            复制并翻译文本框内的文件。
-          </li>
-          <li class="introduction-list-li">
-            将翻译好的内容使用
-            <a href="https://www.bejson.com/" target="_blank">
-              格式化工具
-            </a>
-            来整理。
-          </li>
-          <li class="introduction-list-li">
-            重启 GitKraken。
-          </li>
-        </ol>
-        <details>
-          <summary><b>可能出现的问题和解决建议</b></summary>
-          <a href="https://github.com/yk47g/gitkraken-chinese/issues">
-            报告问题
-          </a>
-          <ol class="introduction-list">
-            <li class="introduction-list-li">
-              使用 API 翻译后并没有插入新增内容：
-              <ul>
-                <li style="list-style: circle">
-                  确认使用了 VS Code 的 Live Server 或类似的服务。
-                </li>
-                <li style="list-style: circle">
-                  检查 API 是否正确配置（有效性、模型访问权限等）。
-                </li>
-              </ul>
-            </li>
-            <li class="introduction-list-li">
-              按下[自动翻译]没反应：
-              <ul>
-                <li style="list-style: circle">
-                  在跳出任何错误弹窗前或控制台更新 JSON 翻译好的内容前，都应该在正常运行（大概），耐心等待即可。
-                </li>
-              </ul>
-            </li>
-            <li class="introduction-list-li">
-              按下[自动翻译]后提示翻译失败：
-              <ul>
-                <li style="list-style: circle">
-                  检查 API 是否正确配置（有效性、模型访问权限）。
-                </li>
-                <li style="list-style: circle">
-                  如果选择的是 DeepSeek API，请检查 DeepSeek 官网 - 产品 -
-                  <a href="https://status.deepseek.com/" target="_blank">服务状态</a>，
-                  或稍后重试。
-                </li>
-                <li style="list-style: circle">
-                  如果还是不行，可以尝试报告问题。有可能是我的问题（因为我也没测试过，新增该 API 时他们的 API 还在维护）。
-                </li>
-              </ul>
-            </li>
-          </ol>
-        </details>
-
-        <details>
-          <summary><b>OpenAI API 的申请步骤</b></summary>
-          <ol class="introduction-list">
-            <li class="introduction-list-li">
-              进入 <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI 官方网站</a>。
-            </li>
-            <li class="introduction-list-li">注册或登录。</li>
-            <li class="introduction-list-li">
-              在顶栏左上角新建 Project（可选）或使用用户密钥（可选，不推荐），之后在顶栏右上角选择“Dashboard”，随后侧边栏选择“API
-              Keys”。
-            </li>
-            <li class="introduction-list-li">通过“+ Create New secret key”按照提示新建一个密钥。</li>
-            <li class="introduction-list-li">
-              <b style="color: #F00">请保管好您的密钥。平台将不会再次展示您的密钥，
-                忘记则意味着您需要重新创建密钥并删除旧的密钥。</b>
-            </li>
-            <li class="introduction-list-li">
-              复制以 sk- 开头的API密钥到配置中。建议使用“gpt-4o-mini”模型，足以保证翻译效果，且免费限额高。（主要是便宜）
-            </li>
-          </ol>
-          <p class="hint">
-            <a href="https://platform.openai.com/docs/pricing" target="_blank">收费标准</a>
-            |
-            <a href="https://platform.openai.com/tokenizer" target="_blank">Token 计算</a>
-          </p>
-        </details>
-
-        <details>
-          <summary><b>DeepSeek API 的申请步骤</b></summary>
-          <ol class="introduction-list">
-            <li class="introduction-list-li">
-              访问 DeepSeek <a href="https://platform.deepseek.com/api_keys" target="_blank">API 开放平台</a>。
-            </li>
-            <li class="introduction-list-li">注册/登录后进入 API keys 管理页面。</li>
-            <li class="introduction-list-li">点击“创建 API key”生成新密钥。</li>
-            <li class="introduction-list-li">
-              <b style="color: #F00">请保管好您的密钥。平台将不会再次展示您的密钥，
-                忘记则意味着您需要重新创建密钥并删除旧的密钥。</b>
-            </li>
-            <li class="introduction-list-li">复制以 sk- 开头的 API 密钥到配置中。</li>
-          </ol>
-          <p class="hint">
-            <a href="https://api-docs.deepseek.com/zh-cn/quick_start/pricing" target="_blank">收费标准</a>
-            |
-            <a href="https://api-docs.deepseek.com/zh-cn/quick_start/token_usage" target="_blank">Token 计算</a>
-          </p>
-        </details>
-
-        <details>
-          <summary><b>有道 API 的申请步骤</b></summary>
-          <ol class="introduction-list">
-            <li class="introduction-list-li">
-              进入 <a href="https://ai.youdao.com/console/#/service-singleton/text-translation"
-                      target="_blank">有道智云控制台</a>。
-            </li>
-            <li class="introduction-list-li">注册或登录。</li>
-            <li class="introduction-list-li">在侧边栏选择“自然语言翻译服务/文本翻译”。</li>
-            <li class="introduction-list-li">找到“文本翻译/应用概览/创建应用”。</li>
-            <li class="introduction-list-li">创建应用并复制 AppKey 和 AppSecret 到配置中。</li>
-          </ol>
-          <p class="hint">
-            <a href="https://ai.youdao.com/price-center.s#servicename=fanyi-text" target="_blank">收费标准</a>
-          </p>
-        </details>
-      </fieldset>
-    </div>
-
-    <div id="sp">
-      <div>
-        <b>差异项（{{diffItems.length}}）
-          <span style="color: green">新增</span>
-          <span style="color: red"> 删减</span>
-          <span style="color: blue">改动</span>
-        </b>
-      </div>
+  <fieldset id="introduction">
+   <legend>使用说明</legend>
+   <b>对于有提供支持的 API 的用户：</b>
+   <ol class="introduction-list">
+    <li class="introduction-list-li">
+     填写 API 配置并保存。
+    </li>
+    <li class="introduction-list-li">
+     上传旧版英文文件（./原语言文件备份/strings.json），新版英文文件（具体位置见 ./README.md 中要替换的语言文件位置）
+     和旧版翻译文件（./strings_x.x.x.json）并点击 [对比] 按钮得到差异内容。
+    </li>
+    <li class="introduction-list-li">
+     点击 [自动翻译] 按钮翻译并等待弹出“翻译完成”提示框。
+    </li>
+    <li class="introduction-list-li">
+     导出并覆盖 strings.json 文件。
+    </li>
+    <li class="introduction-list-li">
+     重启 GitKraken。
+    </li>
+   </ol>
+   <b>对于没有 API 的用户：</b>
+   <ol class="introduction-list">
+    <li class="introduction-list-li">
+     上传旧版英文文件（./原语言文件备份/strings.json），新版英文文件（具体位置见 ./README.md 中要替换的语言文件位置）
+     和旧版翻译文件（./strings_x.x.x.json）并点击 [对比] 按钮得到差异内容。
+    </li>
+    <li class="introduction-list-li">
+     复制并翻译文本框内的文件。
+    </li>
+    <li class="introduction-list-li">
+     将翻译好的内容使用
+     <a href="https://www.bejson.com/" target="_blank">
+      格式化工具
+     </a>
+     来整理。
+    </li>
+    <li class="introduction-list-li">
+     重启 GitKraken。
+    </li>
+   </ol>
+   <details>
+    <summary><b>可能出现的问题和解决建议</b></summary>
+    <a href="https://github.com/yk47g/gitkraken-chinese/issues">
+     报告问题
+    </a>
+    <ol class="introduction-list">
+     <li class="introduction-list-li">
+      使用 API 翻译后并没有插入新增内容：
       <ul>
-        <li v-for="(diff, index) in diffItems" :key="index"
-            :class="{'diff-green': diff.color === 'green',
+       <li style="list-style: circle">
+        确认使用了 VS Code 的 Live Server 或类似的服务。
+       </li>
+       <li style="list-style: circle">
+        检查 API 是否正确配置（有效性、模型访问权限等）。
+       </li>
+      </ul>
+     </li>
+     <li class="introduction-list-li">
+      按下[自动翻译]没反应：
+      <ul>
+       <li style="list-style: circle">
+        在跳出任何错误弹窗前或控制台更新 JSON 翻译好的内容前，都应该在正常运行（大概），耐心等待即可。
+       </li>
+      </ul>
+     </li>
+     <li class="introduction-list-li">
+      按下[自动翻译]后提示翻译失败：
+      <ul>
+       <li style="list-style: circle">
+        检查 API 是否正确配置（有效性、模型访问权限）。
+       </li>
+       <li style="list-style: circle">
+        如果选择的是 DeepSeek API，请检查 DeepSeek 官网 - 产品 -
+        <a href="https://status.deepseek.com/" target="_blank">服务状态</a>，
+        或稍后重试。
+       </li>
+       <li style="list-style: circle">
+        如果还是不行，可以尝试报告问题。有可能是我的问题（因为我也没测试过，新增该 API 时他们的 API 还在维护）。
+       </li>
+      </ul>
+     </li>
+    </ol>
+   </details>
+
+   <details>
+    <summary><b>OpenAI API 的申请步骤</b></summary>
+    <ol class="introduction-list">
+     <li class="introduction-list-li">
+      进入 <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI 官方网站</a>。
+     </li>
+     <li class="introduction-list-li">注册或登录。</li>
+     <li class="introduction-list-li">
+      在顶栏左上角新建 Project（可选）或使用用户密钥（可选，不推荐），之后在顶栏右上角选择“Dashboard”，随后侧边栏选择“API
+      Keys”。
+     </li>
+     <li class="introduction-list-li">通过“+ Create New secret key”按照提示新建一个密钥。</li>
+     <li class="introduction-list-li">
+      <b style="color: #F00">请保管好您的密钥。平台将不会再次展示您的密钥，
+       忘记则意味着您需要重新创建密钥并删除旧的密钥。</b>
+     </li>
+     <li class="introduction-list-li">
+      复制以 sk- 开头的API密钥到配置中。建议使用“gpt-4o-mini”模型，足以保证翻译效果，且免费限额高。（主要是便宜）
+     </li>
+    </ol>
+    <p class="hint">
+     <a href="https://platform.openai.com/docs/pricing" target="_blank">收费标准</a>
+     |
+     <a href="https://platform.openai.com/tokenizer" target="_blank">Token 计算</a>
+    </p>
+   </details>
+
+   <details>
+    <summary><b>DeepSeek API 的申请步骤</b></summary>
+    <ol class="introduction-list">
+     <li class="introduction-list-li">
+      访问 DeepSeek <a href="https://platform.deepseek.com/api_keys" target="_blank">API 开放平台</a>。
+     </li>
+     <li class="introduction-list-li">注册/登录后进入 API keys 管理页面。</li>
+     <li class="introduction-list-li">点击“创建 API key”生成新密钥。</li>
+     <li class="introduction-list-li">
+      <b style="color: #F00">请保管好您的密钥。平台将不会再次展示您的密钥，
+       忘记则意味着您需要重新创建密钥并删除旧的密钥。</b>
+     </li>
+     <li class="introduction-list-li">复制以 sk- 开头的 API 密钥到配置中。</li>
+    </ol>
+    <p class="hint">
+     <a href="https://api-docs.deepseek.com/zh-cn/quick_start/pricing" target="_blank">收费标准</a>
+     |
+     <a href="https://api-docs.deepseek.com/zh-cn/quick_start/token_usage" target="_blank">Token 计算</a>
+    </p>
+   </details>
+
+   <details>
+    <summary><b>有道 API 的申请步骤</b></summary>
+    <ol class="introduction-list">
+     <li class="introduction-list-li">
+      进入 <a href="https://ai.youdao.com/console/#/service-singleton/text-translation"
+              target="_blank">有道智云控制台</a>。
+     </li>
+     <li class="introduction-list-li">注册或登录。</li>
+     <li class="introduction-list-li">在侧边栏选择“自然语言翻译服务/文本翻译”。</li>
+     <li class="introduction-list-li">找到“文本翻译/应用概览/创建应用”。</li>
+     <li class="introduction-list-li">创建应用并复制 AppKey 和 AppSecret 到配置中。</li>
+    </ol>
+    <p class="hint">
+     <a href="https://ai.youdao.com/price-center.s#servicename=fanyi-text" target="_blank">收费标准</a>
+    </p>
+   </details>
+  </fieldset>
+ </div>
+
+ <div id="sp">
+  <div>
+   <b>差异项（{{ diffItems.length }}）
+    <span style="color: green">新增</span>
+    <span style="color: red"> 删减</span>
+    <span style="color: blue">改动</span>
+   </b>
+  </div>
+  <ul>
+   <li v-for="(diff, index) in diffItems" :key="index"
+       :class="{'diff-green': diff.color === 'green',
                      'diff-red': diff.color === 'red',
                      'diff-blue': diff.color === 'blue'}">
-          <!-- 改动时显示旧值->新值 -->
-          <span v-if="diff.type==='changed'">
-            {{index + 1}}. {{diff.key}} ({{diff.oldValue}} => {{diff.newValue}})
+    <!-- 改动时显示旧值->新值 -->
+    <span v-if="diff.type==='changed'">
+            {{ index + 1 }}. {{ diff.key }} ({{ diff.oldValue }} => {{ diff.newValue }})
           </span>
-          <!-- 新增/删减只显示key -->
-          <span v-else-if="diff.type==='added'">
-            {{index + 1}}. {{diff.key}}
+    <!-- 新增/删减只显示key -->
+    <span v-else-if="diff.type==='added'">
+            {{ index + 1 }}. {{ diff.key }}
           </span>
-          <span v-else-if="diff.type==='removed'">
-            {{index + 1}}. {{diff.key}}
+    <span v-else-if="diff.type==='removed'">
+            {{ index + 1 }}. {{ diff.key }}
           </span>
-        </li>
-      </ul>
-    </div>
-  </div>
+   </li>
+  </ul>
+ </div>
+</div>
 </body>
 
 </html>
 
 <script>
 
-const app = new Vue({
-  el: '#app',
-  data() {
-    return {
-      /**
-       * 文件内容解析（key/value）
-       */
-      // 新版英文
-      menuStringsNewEn: [],
-      // 旧版中文
-      menuStringsOldZh: [],
-      // 旧版英文
-      menuStringsOldEn: [],
-      // 新版英文文件原始行内容(含空行/大括号/逗号)
-      newFileRawLines: [],
-      // 结果差异
-      diffItems: [],
+  const app = new Vue({
+    el: '#app',
+    data() {
+      return {
+        /**
+         * 文件内容解析（key/value）
+         */
+        // 新版英文
+        menuStringsNewEn: [],
+        // 旧版中文
+        menuStringsOldZh: [],
+        // 旧版英文
+        menuStringsOldEn: [],
+        // 新版英文文件原始行内容(含空行/大括号/逗号)
+        newFileRawLines: [],
+        // 结果差异
+        diffItems: [],
 
-      // 提示
-      showOldEnError: false,
-      showNewEnError: false,
-      showOldZhError: false,
-      errorMsg: null,
-      saveMessage: '',
-      saveMessageType: 'success',
-      /**
-       * API 配置
-       */
-      // 默认 API
-      selectedApi: 'openai',
-      // OpenAI API 配置
-      openai: {
-        apiKey: '',
-        // 默认模型
-        model: 'gpt-4o-mini',
-        temperature: 0.2,
-      },
-      // DeepSeek API 配置
-      deepseek: {
-        apiKey: '',
-        // 默认模型
-        model: 'deepseek-chat',
-        temperature: 0.2,
-      },
-      // 有道 API 配置
-      youdao: {
-        appKey: '',
-        appSecret: '',
-        salt: (new Date).getTime(),
-        from: 'en',
-        to: 'zh-CHS',
-      },
+        // 提示
+        showOldEnError: false,
+        showNewEnError: false,
+        showOldZhError: false,
+        errorMsg: null,
+        saveMessage: '',
+        saveMessageType: 'success',
+        /**
+         * API 配置
+         */
+        // 默认 API
+        selectedApi: 'openai',
+        // OpenAI API 配置
+        openai: {
+          apiKey: '',
+          // 默认模型
+          model: 'gpt-4o-mini',
+          temperature: 0.2,
+        },
+        // DeepSeek API 配置
+        deepseek: {
+          apiKey: '',
+          // 默认模型
+          model: 'deepseek-chat',
+          temperature: 0.2,
+        },
+        // 有道 API 配置
+        youdao: {
+          appKey: '',
+          appSecret: '',
+          salt: (new Date).getTime(),
+          from: 'en',
+          to: 'zh-CHS',
+        },
 
-      // 固定翻译词汇
-      fixedTranslations: [
-        {term: 'Bisect', translation: '二分查找'},
-        {term: 'Cherry Pick', translation: '拣选'},
-        {term: 'Collaborator', translation: '协作者'},
-        {term: 'Compose', translation: '编写'},
-        {term: 'Conventional Commits', translation: '约定式提交'},
-        {term: 'DETACHED HEAD', translation: '游离 HEAD'},
-        {term: 'Email', translation: '邮箱'},
-        {term: 'Email Address', translation: '邮箱'},
-        {term: 'Filter', translation: '过滤器'},
-        {term: 'Fork', translation: '派生/派生仓库'},
-        {term: 'GitKraken Desktop', translation: 'GitKraken 桌面版'},
-        {term: 'Graph', translation: '图'},
-        {term: 'Git GUI', translation: 'Git 图形界面'},
-        {term: 'Git Provider', translation: 'Git 托管'},
-        {term: 'Hunk', translation: '区块'},
-        {term: 'Others', translation: '其它'},
-        {term: 'Pull Request', translation: '拉取请求'},
-        {term: 'Rebase', translation: '变基'},
-        {term: 'Repo', translation: '仓库'},
-        {term: 'Solo', translation: '单独显示'},
-        {term: 'Stage', translation: '暂存'},
-        {term: 'Stash', translation: '贮藏'},
-        {term: 'Working directory', translation: '工作目录'},
-        {term: 'Workspace', translation: '工作区'}
-      ],
+        // 固定翻译词汇
+        fixedTranslations: [
+          {term: 'Bisect', translation: '二分查找'},
+          {term: 'Cherry Pick', translation: '拣选'},
+          {term: 'Collaborator', translation: '协作者'},
+          {term: 'Compose', translation: '编写'},
+          {term: 'Conventional Commits', translation: '约定式提交'},
+          {term: 'DETACHED HEAD', translation: '游离 HEAD'},
+          {term: 'Email', translation: '邮箱'},
+          {term: 'Email Address', translation: '邮箱'},
+          {term: 'Filter', translation: '过滤器'},
+          {term: 'Fork', translation: '派生/派生仓库'},
+          {term: 'GitKraken Desktop', translation: 'GitKraken 桌面版'},
+          {term: 'Graph', translation: '图'},
+          {term: 'Git GUI', translation: 'Git 图形界面'},
+          {term: 'Git Provider', translation: 'Git 托管'},
+          {term: 'Hunk', translation: '区块'},
+          {term: 'Others', translation: '其它'},
+          {term: 'Pull Request', translation: '拉取请求'},
+          {term: 'Rebase', translation: '变基'},
+          {term: 'Repo', translation: '仓库'},
+          {term: 'Solo', translation: '单独显示'},
+          {term: 'Stage', translation: '暂存'},
+          {term: 'Stash', translation: '贮藏'},
+          {term: 'Working directory', translation: '工作目录'},
+          {term: 'Workspace', translation: '工作区'}
+        ],
 
-      // 需要保留的专有名词数组
-      keepTranslations: [
-        'Launchpad',
-        'WIP',
-        'Gitflow',
-        'AI Token',
-      ]
-    };
-  },
-  methods: {
-    /**
-     * 导出JSON文件
-     */
-    exportJson() {
-      const content = document.getElementById('textJson').value;
-      if (!content.trim()) {
-        this.errorMsg = '没有可以导出的内容';
-        return;
-      }
-
-      const blob = new Blob([content], {type: 'application/json'});
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'strings.json';
-      link.click();
-
-      URL.revokeObjectURL(link.href);
-    },
-
-    /**
-     * 复制到剪切板
-     *
-     * @returns {Promise<void>}
-     */
-    async copyToClipboard() {
-      const content = document.getElementById('textJson').value;
-      if (!content.trim()) {
-        this.errorMsg = '没有可以复制的内容';
-        return;
-      }
-
-      try {
-        await navigator.clipboard.writeText(content);
-      } catch (e) {
-        this.errorMsg = '复制失败，请手动复制';
-      }
-    },
-
-    /**
-     * 读取文件
-     * @param type 'newEn' (新版英文) | 'oldZh' (旧版中文) | 'oldEN' (旧版英文)
-     */
-    loadFile(type) {
-      this.showOldEnError = false;
-
-      let inputId;
-      switch (type) {
-        case 'newEn':
-          inputId = 'newEnFile';
-          break;
-        case 'oldZh':
-          inputId = 'oldZhFile';
-          break;
-        case 'oldEN':
-          inputId = 'oldEnFile';
-          break;
-      }
-      const fileInput = document.getElementById(inputId);
-      if (!fileInput.files[0]) {
-        this.errorMsg = '未选择文件';
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = e => {
-        const rawText = e.target.result;
-        if (typeof rawText !== 'string') return;
-        try {
-          // 用 JSON.parse 获取 key-value
-          const jsonObj = JSON.parse(rawText);
-          if (type === 'newEn') {
-            this.menuStringsNewEn = [];
-            this.newFileRawLines = rawText.split(/\r?\n/);
-            this.processJsonKeys(jsonObj, 'newEn');
-          } else if (type === 'oldZh') {
-            this.menuStringsOldZh = [];
-            this.processJsonKeys(jsonObj, 'oldZh');
-          } else {
-            this.menuStringsOldEn = [];
-            this.processJsonKeys(jsonObj, 'oldEN');
-          }
-        } catch (e) {
-          this.errorMsg = '文件内容无效，无法解析为JSON';
-        }
+        // 需要保留的专有名词数组
+        keepTranslations: [
+          'Launchpad',
+          'WIP',
+          'Gitflow',
+          'AI Token',
+        ]
       };
-      reader.readAsText(fileInput.files[0]);
     },
+    methods: {
+      /**
+       * 导出JSON文件
+       */
+      exportJson() {
+        const content = document.getElementById('textJson').value;
+        if (!content.trim()) {
+          this.errorMsg = '没有可以导出的内容';
+          return;
+        }
 
-    /**
-     * 将JSON里的 languageOption/menuStrings/strings 提取为数组
-     * @param json
-     * @param fileType
-     */
-    processJsonKeys(json, fileType) {
-      ['languageOption', 'menuStrings', 'strings'].forEach(scope => {
-        if (!json[scope]) return;
-        Object.keys(json[scope]).forEach(key => {
-          const item = {key, value: json[scope][key], scope};
-          if (fileType === 'newEn') {
-            this.menuStringsNewEn.push(item);
-          } else if (fileType === 'oldZh') {
-            this.menuStringsOldZh.push(item);
-          } else {
-            this.menuStringsOldEn.push(item);
+        const blob = new Blob([content], {type: 'application/json'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'strings.json';
+        link.click();
+
+        URL.revokeObjectURL(link.href);
+      },
+
+      /**
+       * 复制到剪切板
+       *
+       * @returns {Promise<void>}
+       */
+      async copyToClipboard() {
+        const content = document.getElementById('textJson').value;
+        if (!content.trim()) {
+          this.errorMsg = '没有可以复制的内容';
+          return;
+        }
+
+        try {
+          await navigator.clipboard.writeText(content);
+        } catch (e) {
+          this.errorMsg = '复制失败，请手动复制';
+        }
+      },
+
+      /**
+       * 读取文件
+       * @param type 'newEn' (新版英文) | 'oldZh' (旧版中文) | 'oldEN' (旧版英文)
+       */
+      loadFile(type) {
+        this.showOldEnError = false;
+
+        let inputId;
+        switch (type) {
+          case 'newEn':
+            inputId = 'newEnFile';
+            break;
+          case 'oldZh':
+            inputId = 'oldZhFile';
+            break;
+          case 'oldEN':
+            inputId = 'oldEnFile';
+            break;
+        }
+        const fileInput = document.getElementById(inputId);
+        if (!fileInput.files[0]) {
+          this.errorMsg = '未选择文件';
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = e => {
+          const rawText = e.target.result;
+          if (typeof rawText !== 'string') return;
+          try {
+            // 用 JSON.parse 获取 key-value
+            const jsonObj = JSON.parse(rawText);
+            if (type === 'newEn') {
+              this.menuStringsNewEn = [];
+              this.newFileRawLines = rawText.split(/\r?\n/);
+              this.processJsonKeys(jsonObj, 'newEn');
+            } else if (type === 'oldZh') {
+              this.menuStringsOldZh = [];
+              this.processJsonKeys(jsonObj, 'oldZh');
+            } else {
+              this.menuStringsOldEn = [];
+              this.processJsonKeys(jsonObj, 'oldEN');
+            }
+          } catch (e) {
+            this.errorMsg = '文件内容无效，无法解析为JSON';
           }
+        };
+        reader.readAsText(fileInput.files[0]);
+      },
+
+      /**
+       * 将JSON里的 languageOption/menuStrings/strings 提取为数组
+       * @param json
+       * @param fileType
+       */
+      processJsonKeys(json, fileType) {
+        ['languageOption', 'menuStrings', 'strings'].forEach(scope => {
+          if (!json[scope]) return;
+          Object.keys(json[scope]).forEach(key => {
+            const item = {key, value: json[scope][key], scope};
+            if (fileType === 'newEn') {
+              this.menuStringsNewEn.push(item);
+            } else if (fileType === 'oldZh') {
+              this.menuStringsOldZh.push(item);
+            } else {
+              this.menuStringsOldEn.push(item);
+            }
+          });
         });
-      });
-    },
+      },
 
-    /**
-     * 使用新英文对比旧英文
-     * 检测新增、删减、改动（key 相同但值发生变化）
-     */
-    compare() {
-      // 错误提示
-      this.showNewEnError = false;
-      this.showOldEnError = false;
-      this.showOldZhError = false;
+      /**
+       * 使用新英文对比旧英文
+       * 检测新增、删减、改动（key 相同但值发生变化）
+       */
+      compare() {
+        // 错误提示
+        this.showNewEnError = false;
+        this.showOldEnError = false;
+        this.showOldZhError = false;
 
 
-      if (!this.menuStringsNewEn.length) {
-        this.showNewEnError = true;
-        return;
-      }
-
-      if (!this.menuStringsOldEn.length) {
-        this.showOldEnError = true;
-        return;
-      }
-
-      if (!this.menuStringsOldZh.length) {
-        this.showOldZhError = true;
-        return;
-      }
-
-      this.diffItems = [];
-
-      // 新增
-      this.menuStringsNewEn.forEach(newItem => {
-        const oldItem = this.menuStringsOldEn.find(o => o.key === newItem.key && o.scope === newItem.scope);
-        if (!oldItem) {
-          this.diffItems.push({
-            key: newItem.key,
-            scope: newItem.scope,
-            color: 'green',
-            type: 'added',
-            newValue: newItem.value
-          });
+        if (!this.menuStringsNewEn.length) {
+          this.showNewEnError = true;
+          return;
         }
-      });
 
-      // 删减
-      this.menuStringsOldEn.forEach(oldItem => {
-        const newItem = this.menuStringsNewEn.find(n => n.key === oldItem.key && n.scope === oldItem.scope);
-        if (!newItem) {
-          this.diffItems.push({
-            key: oldItem.key,
-            scope: oldItem.scope,
-            color: 'red',
-            type: 'removed',
-            oldValue: oldItem.value
-          });
+        if (!this.menuStringsOldEn.length) {
+          this.showOldEnError = true;
+          return;
         }
-      });
 
-      // 改动
-      this.menuStringsNewEn.forEach(newItem => {
-        const oldItem = this.menuStringsOldEn.find(o => o.key === newItem.key && o.scope === newItem.scope);
-        if (oldItem) {
-          if (!this.isSameString(oldItem.value, newItem.value)) {
+        if (!this.menuStringsOldZh.length) {
+          this.showOldZhError = true;
+          return;
+        }
+
+        this.diffItems = [];
+
+        // 新增
+        this.menuStringsNewEn.forEach(newItem => {
+          const oldItem = this.menuStringsOldEn.find(o => o.key === newItem.key && o.scope === newItem.scope);
+          if (!oldItem) {
             this.diffItems.push({
               key: newItem.key,
               scope: newItem.scope,
-              color: 'blue',
-              type: 'changed',
-              oldValue: oldItem.value,
+              color: 'green',
+              type: 'added',
               newValue: newItem.value
             });
           }
-        }
-      });
+        });
 
-      if (!this.diffItems.length) {
-        this.errorMsg = '未发现差异。';
-      }
-
-      this.autoGen();
-    },
-
-    isSameString(a, b) {
-      // 逻辑层面判断字符串是否相同
-      return a === b;
-    },
-
-    /**
-     * 转义 JSON 值
-     * @param str JSON 值
-     * @return {string} 转义后的值
-     */
-    escapeJsonValue(str) {
-      if (typeof str !== 'string') {
-        str = String(str);
-      }
-      return JSON.stringify(str).slice(1, -1);
-    },
-
-    /**
-     * 自动生成JSON
-     * 基于旧版中文文件做合并，但行顺序和空行以新版英文文件为模板重构
-     * 差异项：
-     *   -added：新增 => 输出中文翻译或保留新版英文字符（若未翻译）
-     *   -removed：删减
-     *   -changed： 替换为新版英文（深度对比时）
-     *   -未出现在diffItems的=>保留旧版中文翻译
-     */
-    autoGen() {
-      // 1. 把旧版中文转为字典
-      const oldCnDict = {
-        languageOption: {},
-        menuStrings: {},
-        strings: {}
-      };
-      this.menuStringsOldZh.forEach(item => {
-        oldCnDict[item.scope][item.key] = item.value;
-      });
-
-      // 2. 把差异项变成 map
-      const diffMap = {};
-      this.diffItems.forEach(d => {
-        diffMap[d.scope + '\u0000' + d.key] = d;
-      });
-
-      let currentScope = null;
-
-      // 判断是不是在进入作用域
-      const scopePattern = /^\s*"?(languageOption|menuStrings|strings)"?\s*:\s*\{\s*$/;
-
-      // 判断是不是关闭了当前作用域
-      const scopeClosePattern = /^\s*}\s*,?\s*$/;
-
-      // 匹配键值行
-      const keyValuePattern = /^(\s*)"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"\s*(,?)\s*$/;
-      const resultLines = [];
-
-      for (let i = 0; i < this.newFileRawLines.length; i++) {
-        const line = this.newFileRawLines[i];
-
-        // 判断有没有匹配到“进入作用域”
-        const scopeOpenMatch = line.match(scopePattern);
-        if (scopeOpenMatch) {
-          currentScope = scopeOpenMatch[1];
-          resultLines.push(line);
-          continue;
-        }
-
-        // 判断有没有匹配到“退出作用域”
-        const scopeCloseMatch = line.match(scopeClosePattern);
-        if (scopeCloseMatch) {
-          currentScope = null; // 退出当前作用域
-          resultLines.push(line);
-          continue;
-        }
-
-        const kvMatch = line.match(keyValuePattern);
-        if (!kvMatch) {
-          resultLines.push(line);
-          continue;
-        }
-
-        const leadingSpaces = kvMatch[1];
-        const rawKey = kvMatch[2];
-        const rawVal = kvMatch[3];
-        const trailingComma = kvMatch[4];
-
-        let parsedKey, parsedVal;
-        try {
-          parsedKey = JSON.parse(`"${rawKey}"`);
-          parsedVal = JSON.parse(`"${rawVal}"`);
-        } catch (e) {
-          resultLines.push(line);
-          continue;
-        }
-
-        let scopeName = currentScope || 'strings';
-
-        // 根据 diffMap 判断该 key 在当前作用域是否被增删改
-        const diffKey = scopeName + '\u0000' + parsedKey;
-        const diffInfo = diffMap[diffKey];
-
-        if (diffInfo) {
-          if (diffInfo.type === 'removed') {
-            // 不输出此行
-          } else if (diffInfo.type === 'added' || diffInfo.type === 'changed') {
-            // 如果存在翻译结果，则使用翻译结果，否则使用原始 newValue
-            const finalValue = diffInfo.translatedValue ? diffInfo.translatedValue : diffInfo.newValue;
-            const escapedVal = this.escapeJsonValue(finalValue);
-            const newLine = `${leadingSpaces}"${this.escapeJsonValue(parsedKey)}": "${escapedVal}"${trailingComma}`;
-            resultLines.push(newLine);
-          } else {
-            // 大概应该可能差不多不会跳到这里吧ww
-          }
-        } else {
-          // 无差异 => 保留旧版翻译
-          const oldVal = oldCnDict[scopeName][parsedKey];
-          const finalVal = (typeof oldVal === 'string') ? oldVal : parsedVal;
-          const escapedVal = this.escapeJsonValue(finalVal);
-          const newLine = `${leadingSpaces}"${this.escapeJsonValue(parsedKey)}": "${escapedVal}"${trailingComma}`;
-          resultLines.push(newLine);
-        }
-      }
-
-      document.getElementById('textJson').value = resultLines.join('\n');
-    },
-
-    /**
-     * 自动翻译
-     */
-    async autoTranslate() {
-      this.showNewEnError = false;
-      this.showOldEnError = false;
-      this.showOldZhError = false;
-      this.errorMsg = null;
-
-      // 验证API配置
-      if (this.selectedApi === 'openai') {
-        if (!this.openai.apiKey) {
-          this.errorMsg = '请填写 OpenAI API 密钥。';
-          return;
-        }
-      } else if (this.selectedApi === 'deepseek') {
-        if (!this.deepseek.apiKey) {
-          this.errorMsg = '请填写 DeepSeek API 密钥。';
-          return;
-        }
-      } else if (this.selectedApi === 'youdao') {
-        if (!this.youdao.appKey || !this.youdao.appSecret) {
-          this.errorMsg = '请填写有道 AppKey 和 AppSecret。';
-          return;
-        }
-      }
-
-      if (!this.diffItems.length) {
-        this.compare();
-      }
-
-      const toTranslate = this.diffItems.filter(d => (d.type === 'added' || d.type === 'changed'));
-      if (!toTranslate.length) {
-        this.errorMsg = '没有需要翻译的差异项。';
-        return;
-      }
-
-      let translationSucceeded = false;
-
-      // 分批翻译
-      const batchSize = 20;
-      for (let i = 0; i < toTranslate.length; i += batchSize) {
-        const batch = toTranslate.slice(i, i + batchSize);
-        const separator = '|||SEP|||';
-        const query = batch.map(item => item.newValue).join(separator);
-        let translations = [];
-        if (this.selectedApi === 'openai') {
-          translations = await this.translateOpenAI(query);
-        } else if (this.selectedApi === 'deepseek') {
-          translations = await this.translateDeepSeek(query);
-        } else if (this.selectedApi === 'youdao') {
-          translations = await this.translateYoudao(query);
-        }
-
-        // 检查翻译结果是否有效
-        if (translations.length === 0 || translations.every(t => !t.trim())) {
-          continue;
-        } else {
-          translationSucceeded = true;
-        }
-
-        // 回写翻译
-        batch.forEach((item, index) => {
-          if (translations[index]) {
-            item.translatedValue = translations[index];
+        // 删减
+        this.menuStringsOldEn.forEach(oldItem => {
+          const newItem = this.menuStringsNewEn.find(n => n.key === oldItem.key && n.scope === oldItem.scope);
+          if (!newItem) {
+            this.diffItems.push({
+              key: oldItem.key,
+              scope: oldItem.scope,
+              color: 'red',
+              type: 'removed',
+              oldValue: oldItem.value
+            });
           }
         });
-        await this.sleep(1500);
-      }
 
-      if (translationSucceeded) {
+        // 改动
+        this.menuStringsNewEn.forEach(newItem => {
+          const oldItem = this.menuStringsOldEn.find(o => o.key === newItem.key && o.scope === newItem.scope);
+          if (oldItem) {
+            if (!this.isSameString(oldItem.value, newItem.value)) {
+              this.diffItems.push({
+                key: newItem.key,
+                scope: newItem.scope,
+                color: 'blue',
+                type: 'changed',
+                oldValue: oldItem.value,
+                newValue: newItem.value
+              });
+            }
+          }
+        });
+
+        if (!this.diffItems.length) {
+          this.errorMsg = '未发现差异。';
+        }
+
         this.autoGen();
-        alert('翻译并整理完成！');
-      }
-    },
+      },
 
-    /**
-     * 将固定翻译词汇数组格式化为字符串
-     * @returns {string} 格式化后的字符串
-     */
-    formatFixedTranslations() {
-      return this.fixedTranslations.map(item => `- ${item.term}: "${item.translation}"`).join('\n');
-    },
+      isSameString(a, b) {
+        // 逻辑层面判断字符串是否相同
+        return a === b;
+      },
 
-    /**
-     * 将需要保留的专有名词数组格式化为字符串
-     * @returns {string} 格式化后的字符串
-     */
-    formatKeepTranslations() {
-      return this.keepTranslations.map(term => `- ${term}`).join('\n');
-    },
+      /**
+       * 转义 JSON 值
+       * @param str JSON 值
+       * @return {string} 转义后的值
+       */
+      escapeJsonValue(str) {
+        if (typeof str !== 'string') {
+          str = String(str);
+        }
+        return JSON.stringify(str).slice(1, -1);
+      },
 
-    /**
-     * 调用 OpenAI 翻译
-     *
-     * @param query 翻译内容
-     * @return {Promise<string[]|*[]>} 翻译结果
-     */
-    async translateOpenAI(query) {
-      this.errorMsg = null;
+      /**
+       * 自动生成JSON
+       * 基于旧版中文文件做合并，但行顺序和空行以新版英文文件为模板重构
+       * 差异项：
+       *   -added：新增 => 输出中文翻译或保留新版英文字符（若未翻译）
+       *   -removed：删减
+       *   -changed： 替换为新版英文（深度对比时）
+       *   -未出现在diffItems的=>保留旧版中文翻译
+       */
+      autoGen() {
+        // 1. 把旧版中文转为字典
+        const oldCnDict = {
+          languageOption: {},
+          menuStrings: {},
+          strings: {}
+        };
+        this.menuStringsOldZh.forEach(item => {
+          oldCnDict[item.scope][item.key] = item.value;
+        });
 
-      if (!this.openai.apiKey) {
-        this.errorMsg = 'OpenAI API 密钥未配置。';
-        return [];
-      }
+        // 2. 把差异项变成 map
+        const diffMap = {};
+        this.diffItems.forEach(d => {
+          diffMap[d.scope + '\u0000' + d.key] = d;
+        });
 
-      const messages = [
-        {
-          role: 'system',
-          content: `You are a translation expert specializing in Git operation terminology. Please translate the following Git-related content from English to Chinese.
+        let currentScope = null;
+
+        // 判断是不是在进入作用域
+        const scopePattern = /^\s*"?(languageOption|menuStrings|strings)"?\s*:\s*\{\s*$/;
+
+        // 判断是不是关闭了当前作用域
+        const scopeClosePattern = /^\s*}\s*,?\s*$/;
+
+        // 匹配键值行
+        const keyValuePattern = /^(\s*)"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"\s*(,?)\s*$/;
+        const resultLines = [];
+
+        for (let i = 0; i < this.newFileRawLines.length; i++) {
+          const line = this.newFileRawLines[i];
+
+          // 判断有没有匹配到“进入作用域”
+          const scopeOpenMatch = line.match(scopePattern);
+          if (scopeOpenMatch) {
+            currentScope = scopeOpenMatch[1];
+            resultLines.push(line);
+            continue;
+          }
+
+          // 判断有没有匹配到“退出作用域”
+          const scopeCloseMatch = line.match(scopeClosePattern);
+          if (scopeCloseMatch) {
+            currentScope = null; // 退出当前作用域
+            resultLines.push(line);
+            continue;
+          }
+
+          const kvMatch = line.match(keyValuePattern);
+          if (!kvMatch) {
+            resultLines.push(line);
+            continue;
+          }
+
+          const leadingSpaces = kvMatch[1];
+          const rawKey = kvMatch[2];
+          const rawVal = kvMatch[3];
+          const trailingComma = kvMatch[4];
+
+          let parsedKey, parsedVal;
+          try {
+            parsedKey = JSON.parse(`"${rawKey}"`);
+            parsedVal = JSON.parse(`"${rawVal}"`);
+          } catch (e) {
+            resultLines.push(line);
+            continue;
+          }
+
+          let scopeName = currentScope || 'strings';
+
+          // 根据 diffMap 判断该 key 在当前作用域是否被增删改
+          const diffKey = scopeName + '\u0000' + parsedKey;
+          const diffInfo = diffMap[diffKey];
+
+          if (diffInfo) {
+            if (diffInfo.type === 'removed') {
+              // 不输出此行
+            } else if (diffInfo.type === 'added' || diffInfo.type === 'changed') {
+              // 如果存在翻译结果，则使用翻译结果，否则使用原始 newValue
+              const finalValue = diffInfo.translatedValue ? diffInfo.translatedValue : diffInfo.newValue;
+              const escapedVal = this.escapeJsonValue(finalValue);
+              const newLine = `${leadingSpaces}"${this.escapeJsonValue(parsedKey)}": "${escapedVal}"${trailingComma}`;
+              resultLines.push(newLine);
+            } else {
+              // 大概应该可能差不多不会跳到这里吧ww
+            }
+          } else {
+            // 无差异 => 保留旧版翻译
+            const oldVal = oldCnDict[scopeName][parsedKey];
+            const finalVal = (typeof oldVal === 'string') ? oldVal : parsedVal;
+            const escapedVal = this.escapeJsonValue(finalVal);
+            const newLine = `${leadingSpaces}"${this.escapeJsonValue(parsedKey)}": "${escapedVal}"${trailingComma}`;
+            resultLines.push(newLine);
+          }
+        }
+
+        document.getElementById('textJson').value = resultLines.join('\n');
+      },
+
+      /**
+       * 自动翻译
+       */
+      async autoTranslate() {
+        this.showNewEnError = false;
+        this.showOldEnError = false;
+        this.showOldZhError = false;
+        this.errorMsg = null;
+
+        // 验证API配置
+        if (this.selectedApi === 'openai') {
+          if (!this.openai.apiKey) {
+            this.errorMsg = '请填写 OpenAI API 密钥。';
+            return;
+          }
+        } else if (this.selectedApi === 'deepseek') {
+          if (!this.deepseek.apiKey) {
+            this.errorMsg = '请填写 DeepSeek API 密钥。';
+            return;
+          }
+        } else if (this.selectedApi === 'youdao') {
+          if (!this.youdao.appKey || !this.youdao.appSecret) {
+            this.errorMsg = '请填写有道 AppKey 和 AppSecret。';
+            return;
+          }
+        }
+
+        if (!this.diffItems.length) {
+          this.compare();
+        }
+
+        const toTranslate = this.diffItems.filter(d => (d.type === 'added' || d.type === 'changed'));
+        if (!toTranslate.length) {
+          this.errorMsg = '没有需要翻译的差异项。';
+          return;
+        }
+
+        let translationSucceeded = false;
+
+        // 分批翻译
+        const batchSize = 20;
+        for (let i = 0; i < toTranslate.length; i += batchSize) {
+          const batch = toTranslate.slice(i, i + batchSize);
+          const separator = '|||SEP|||';
+          const query = batch.map(item => item.newValue).join(separator);
+          let translations = [];
+          if (this.selectedApi === 'openai') {
+            translations = await this.translateOpenAI(query);
+          } else if (this.selectedApi === 'deepseek') {
+            translations = await this.translateDeepSeek(query);
+          } else if (this.selectedApi === 'youdao') {
+            translations = await this.translateYoudao(query);
+          }
+
+          // 检查翻译结果是否有效
+          if (translations.length === 0 || translations.every(t => !t.trim())) {
+            continue;
+          } else {
+            translationSucceeded = true;
+          }
+
+          // 回写翻译
+          batch.forEach((item, index) => {
+            if (translations[index]) {
+              item.translatedValue = translations[index];
+            }
+          });
+          await this.sleep(1500);
+        }
+
+        if (translationSucceeded) {
+          this.autoGen();
+          alert('翻译并整理完成！');
+        }
+      },
+
+      /**
+       * 将固定翻译词汇数组格式化为字符串
+       * @returns {string} 格式化后的字符串
+       */
+      formatFixedTranslations() {
+        return this.fixedTranslations.map(item => `- ${item.term}: "${item.translation}"`).join('\n');
+      },
+
+      /**
+       * 将需要保留的专有名词数组格式化为字符串
+       * @returns {string} 格式化后的字符串
+       */
+      formatKeepTranslations() {
+        return this.keepTranslations.map(term => `- ${term}`).join('\n');
+      },
+
+      /**
+       * 调用 OpenAI 翻译
+       *
+       * @param query 翻译内容
+       * @return {Promise<string[]|*[]>} 翻译结果
+       */
+      async translateOpenAI(query) {
+        this.errorMsg = null;
+
+        if (!this.openai.apiKey) {
+          this.errorMsg = 'OpenAI API 密钥未配置。';
+          return [];
+        }
+
+        const messages = [
+          {
+            role: 'system',
+            content: `You are a translation expert specializing in Git operation terminology. Please translate the following Git-related content from English to Chinese.
             The following terms should preferably be translated using the following fixed translations, depending on the context:
             ${this.formatFixedTranslations()}
 
@@ -1020,50 +1020,50 @@ const app = new Vue({
 
             IMPORTANT: Each piece of text to translate is separated by the delimiter "|||SEP|||". You MUST use the exact same delimiter "|||SEP|||" to separate each translated result. Do NOT use newlines as separators between items. Preserve any newlines (\n) that exist within each individual text segment.
             Please note that you should only return the translated text, without engaging in conversation with the user or adding any additional content.`
-        },
-        {role: 'user', content: query}
-      ];
-      console.log(messages);
-      const data = {
-        model: this.openai.model,
-        messages,
-        temperature: this.openai.temperature
-      };
-      const url = 'https://api.openai.com/v1/chat/completions';
-      try {
-        const resp = await axios.post(url, data, {
-          headers: {
-            'Authorization': `Bearer ${this.openai.apiKey}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        const result = resp.data.choices[0].message.content.trim();
-        return result.split('|||SEP|||').map(line => line.trim());
+          },
+          {role: 'user', content: query}
+        ];
+        console.log(messages);
+        const data = {
+          model: this.openai.model,
+          messages,
+          temperature: this.openai.temperature
+        };
+        const url = 'https://api.openai.com/v1/chat/completions';
+        try {
+          const resp = await axios.post(url, data, {
+            headers: {
+              'Authorization': `Bearer ${this.openai.apiKey}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          const result = resp.data.choices[0].message.content.trim();
+          return result.split('|||SEP|||').map(line => line.trim());
 
-      } catch (error) {
-        this.showErrorMsg(error);
-        return [];
-      }
-    },
+        } catch (error) {
+          this.showErrorMsg(error);
+          return [];
+        }
+      },
 
-    /**
-     * 调用 DeepSeek  翻译
-     *
-     * @param query 翻译内容
-     * @return {Promise<string[]|*[]>} 翻译结果
-     */
-    async translateDeepSeek(query) {
-      this.errorMsg = null;
+      /**
+       * 调用 DeepSeek  翻译
+       *
+       * @param query 翻译内容
+       * @return {Promise<string[]|*[]>} 翻译结果
+       */
+      async translateDeepSeek(query) {
+        this.errorMsg = null;
 
-      if (!this.deepseek.apiKey) {
-        this.errorMsg = 'DeepSeek API 密钥未配置。';
-        return [];
-      }
+        if (!this.deepseek.apiKey) {
+          this.errorMsg = 'DeepSeek API 密钥未配置。';
+          return [];
+        }
 
-      const messages = [
-        {
-          role: 'system',
-          content: `您是一名 Git 操作术语的翻译专家。请将以下 Git 相关内容从英文翻译为中文。其中：
+        const messages = [
+          {
+            role: 'system',
+            content: `您是一名 Git 操作术语的翻译专家。请将以下 Git 相关内容从英文翻译为中文。其中：
           以下术语应根据上下文优先选择如下翻译：
           ${this.formatFixedTranslations()}
 
@@ -1072,211 +1072,241 @@ const app = new Vue({
 
           重要：每段待翻译文本之间使用分隔符 "|||SEP|||" 分隔。你必须使用完全相同的分隔符 "|||SEP|||" 来分隔每段翻译结果。不要使用换行符作为不同条目之间的分隔。保留每段文本内部原有的换行符（\n）。
           请注意，您只需返回翻译后的文本，不要与用户进行对话，也不要添加任何其他内容。`
-        },
-        {role: 'user', content: query}
-      ];
-      console.log(messages);
-      const data = {
-        model: this.deepseek.model,
-        messages,
-        temperature: this.deepseek.temperature
-      };
-      const url = 'https://api.deepseek.com/chat/completions';
-      try {
-        const resp = await axios.post(url, data, {
-          headers: {
-            'Authorization': `Bearer ${this.deepseek.apiKey}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        const result = resp.data.choices[0].message.content.trim();
-        return result.split('|||SEP|||').map(line => line.trim());
-      } catch (error) {
-        this.showErrorMsg(error);
-        return [];
-      }
-    },
-
-    /**
-     * 调用有道翻译
-     *
-     * @param query 翻译内容
-     */
-    async translateYoudao(query) {
-      if (!this.youdao.appKey || !this.youdao.appSecret) {
-        console.error('有道AppKey或AppSecret未配置');
-        return [];
-      }
-
-      // 有道 API 不支持自定义分隔符，逐条翻译以避免含 \n 的值导致错位
-      const items = query.split('|||SEP|||');
-      const results = [];
-      for (const item of items) {
-        const text = item.trim();
-        if (!text) {
-          results.push('');
-          continue;
-        }
-        const curtime = Math.round(new Date().getTime() / 1000);
-        const sign = this.buildSign(text, curtime);
-        const url = 'https://openapi.youdao.com/api';
+          },
+          {role: 'user', content: query}
+        ];
+        console.log(messages);
         const data = {
-          q: text,
-          appKey: this.youdao.appKey,
-          salt: this.youdao.salt,
-          from: this.youdao.from,
-          to: this.youdao.to,
-          sign,
-          signType: 'v3',
-          curtime,
+          model: this.deepseek.model,
+          messages,
+          temperature: this.deepseek.temperature
         };
-        const translated = await new Promise(resolve => {
-          $.ajax({
-            url,
-            type: 'POST',
-            dataType: 'jsonp',
-            data,
-            success: function (data) {
-              if (data.errorCode !== '0') {
-                console.log(data);
-                resolve('');
-                return;
-              }
-              resolve(data.translation[0].trim());
-            },
-            error: function (error) {
-              console.error(error);
-              resolve('');
+        const url = 'https://api.deepseek.com/chat/completions';
+        try {
+          const resp = await axios.post(url, data, {
+            headers: {
+              'Authorization': `Bearer ${this.deepseek.apiKey}`,
+              'Content-Type': 'application/json'
             }
           });
-        });
-        results.push(translated);
+          const result = resp.data.choices[0].message.content.trim();
+          return result.split('|||SEP|||').map(line => line.trim());
+        } catch (error) {
+          this.showErrorMsg(error);
+          return [];
+        }
+      },
+
+      /**
+       * 调用有道翻译
+       *
+       * @param query 翻译内容
+       */
+      async translateYoudao(query) {
+        if (!this.youdao.appKey || !this.youdao.appSecret) {
+          console.error('有道AppKey或AppSecret未配置');
+          return [];
+        }
+
+        // 有道 API 不支持自定义分隔符，逐条翻译以避免含 \n 的值导致错位
+        const items = query.split('|||SEP|||');
+        const results = [];
+        for (const item of items) {
+          const text = item.trim();
+          if (!text) {
+            results.push('');
+            continue;
+          }
+          const curtime = Math.round(new Date().getTime() / 1000);
+          const sign = this.buildSign(text, curtime);
+          const url = 'https://openapi.youdao.com/api';
+          const data = {
+            q: text,
+            appKey: this.youdao.appKey,
+            salt: this.youdao.salt,
+            from: this.youdao.from,
+            to: this.youdao.to,
+            sign,
+            signType: 'v3',
+            curtime,
+          };
+          const translated = await new Promise(resolve => {
+            $.ajax({
+              url,
+              type: 'POST',
+              dataType: 'jsonp',
+              data,
+              success: function (data) {
+                if (data.errorCode !== '0') {
+                  console.log(data);
+                  resolve('');
+                  return;
+                }
+                resolve(data.translation[0].trim());
+              },
+              error: function (error) {
+                console.error(error);
+                resolve('');
+              }
+            });
+          });
+          results.push(translated);
+        }
+        return results;
+      },
+
+      buildSign(query, curtime) {
+        const str = this.youdao.appKey + this.truncate(query) + this.youdao.salt + curtime + this.youdao.appSecret;
+        return CryptoJS.SHA256(str).toString(CryptoJS.enc.Hex);
+      },
+
+      truncate(q) {
+        const len = q.length;
+        if (len <= 20) return q;
+        return q.substring(0, 10) + len + q.substring(len - 10, len);
+      },
+
+      sleep(time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+      },
+
+      /**
+       * 保存API配置
+       */
+      saveKeys() {
+        // 获取 AppKey和 AppSecret 或 OpenAI API 密钥的表单内容
+        if (this.selectedApi === 'openai') {
+          const apiKey = this.openai.apiKey;
+          const model = this.openai.model;
+
+          if (!apiKey) {
+            this.saveMessage = '请填写 OpenAI API 密钥。';
+            this.saveMessageType = 'error';
+            return;
+          }
+          if (!model) {
+            this.saveMessage = '请选择 OpenAI 模型。';
+            this.saveMessageType = 'error';
+            return;
+          }
+
+          this.openai.apiKey = apiKey;
+          this.openai.model = model;
+          this.saveMessage = 'OpenAI API 配置已保存。';
+          this.saveMessageType = 'success';
+
+        } else if (this.selectedApi === 'deepseek') {
+          const apiKey = this.deepseek.apiKey;
+          const model = this.deepseek.model;
+
+          if (!apiKey) {
+            this.saveMessage = '请填写 DeepSeek API 密钥。';
+            this.saveMessageType = 'error';
+            return;
+          }
+
+          this.deepseek.apiKey = apiKey;
+          this.deepseek.model = model;
+          this.saveMessage = 'DeepSeek API 配置已保存。';
+          this.saveMessageType = 'success';
+
+        } else if (this.selectedApi === 'youdao') {
+          const appKey = this.youdao.appKey;
+          const appSecret = this.youdao.appSecret;
+
+          if (!appKey) {
+            this.saveMessage = '请填写有道 AppKey。';
+            this.saveMessageType = 'error';
+            return;
+          }
+          if (!appSecret) {
+            this.saveMessage = '请填写有道 AppSecret。';
+            this.saveMessageType = 'error';
+            return;
+          }
+
+          this.youdao.appKey = appKey;
+          this.youdao.appSecret = appSecret;
+          this.saveMessage = '有道 API 配置已保存。';
+          this.saveMessageType = 'success';
+        }
+      },
+
+      /**
+       * 返回 API 错误信息
+       */
+      showErrorMsg(error) {
+        let errorMessage = 'API 错误：';
+
+        // 提取后端返回的具体错误信息（OpenAI / DeepSeek 等均遵循 { error: { message, code, type } } 结构）
+        const apiErr = error.response && error.response.data && error.response.data.error;
+        const apiCode = apiErr && (apiErr.code || apiErr.type);
+        const apiMsg = apiErr && apiErr.message;
+
+        if (error.response) {
+          const status = error.response.status;
+          switch (status) {
+            case 400:
+              errorMessage += '请求参数错误';
+              break;
+            case 401:
+              errorMessage += 'API 密钥无效或未授权';
+              break;
+            case 402:
+              errorMessage += '账户余额不足或需要付费';
+              break;
+            case 403:
+              errorMessage += '访问被拒绝（地区/权限受限）';
+              break;
+            case 404:
+              errorMessage += 'API 端点不存在';
+              break;
+            case 429:
+              if (apiCode === 'insufficient_quota') {
+                errorMessage += '账户额度不足（insufficient_quota），请检查计费与余额';
+              } else if (apiCode === 'billing_hard_limit_reached') {
+                errorMessage += '已达到账户消费硬性上限（billing_hard_limit_reached）';
+              } else if (apiCode === 'rate_limit_exceeded') {
+                errorMessage += '请求过于频繁（rate_limit_exceeded）';
+              } else {
+                errorMessage += '请求被限流或额度不足（429）';
+              }
+              break;
+            case 500:
+              errorMessage += '服务器内部错误';
+              break;
+            case 502:
+              errorMessage += '网关错误';
+              break;
+            case 503:
+              errorMessage += '服务暂时不可用';
+              break;
+            case 504:
+              errorMessage += '网关超时';
+              break;
+            default:
+              errorMessage += `未知错误 (HTTP ${status})`;
+          }
+
+          // 附带后端返回的具体 code 与 message，便于排查
+          const detailParts = [];
+          if (apiCode) detailParts.push(`code=${apiCode}`);
+          if (apiMsg) detailParts.push(apiMsg);
+          if (!detailParts.length && error.message) detailParts.push(error.message);
+          if (detailParts.length) {
+            errorMessage += `（${detailParts.join('；')}）`;
+          }
+        } else if (error.request) {
+          errorMessage += '无法连接到服务器';
+          if (error.message) errorMessage += `（${error.message}）`;
+        } else {
+          errorMessage += '请求配置错误';
+          if (error.message) errorMessage += `（${error.message}）`;
+        }
+
+        this.errorMsg = errorMessage;
+        console.error('[showErrorMsg]', error.response || error);
       }
-      return results;
-    },
-
-    buildSign(query, curtime) {
-      const str = this.youdao.appKey + this.truncate(query) + this.youdao.salt + curtime + this.youdao.appSecret;
-      return CryptoJS.SHA256(str).toString(CryptoJS.enc.Hex);
-    },
-
-    truncate(q) {
-      const len = q.length;
-      if (len <= 20) return q;
-      return q.substring(0, 10) + len + q.substring(len - 10, len);
-    },
-
-    sleep(time) {
-      return new Promise((resolve) => setTimeout(resolve, time));
-    },
-
-    /**
-     * 保存API配置
-     */
-    saveKeys() {
-      // 获取 AppKey和 AppSecret 或 OpenAI API 密钥的表单内容
-      if (this.selectedApi === 'openai') {
-        const apiKey = this.openai.apiKey;
-        const model = this.openai.model;
-
-        if (!apiKey) {
-          this.saveMessage = '请填写 OpenAI API 密钥。';
-          this.saveMessageType = 'error';
-          return;
-        }
-        if (!model) {
-          this.saveMessage = '请选择 OpenAI 模型。';
-          this.saveMessageType = 'error';
-          return;
-        }
-
-        this.openai.apiKey = apiKey;
-        this.openai.model = model;
-        this.saveMessage = 'OpenAI API 配置已保存。';
-        this.saveMessageType = 'success';
-
-      } else if (this.selectedApi === 'deepseek') {
-        const apiKey = this.deepseek.apiKey;
-        const model = this.deepseek.model;
-
-        if (!apiKey) {
-          this.saveMessage = '请填写 DeepSeek API 密钥。';
-          this.saveMessageType = 'error';
-          return;
-        }
-
-        this.deepseek.apiKey = apiKey;
-        this.deepseek.model = model;
-        this.saveMessage = 'DeepSeek API 配置已保存。';
-        this.saveMessageType = 'success';
-
-      } else if (this.selectedApi === 'youdao') {
-        const appKey = this.youdao.appKey;
-        const appSecret = this.youdao.appSecret;
-
-        if (!appKey) {
-          this.saveMessage = '请填写有道 AppKey。';
-          this.saveMessageType = 'error';
-          return;
-        }
-        if (!appSecret) {
-          this.saveMessage = '请填写有道 AppSecret。';
-          this.saveMessageType = 'error';
-          return;
-        }
-
-        this.youdao.appKey = appKey;
-        this.youdao.appSecret = appSecret;
-        this.saveMessage = '有道 API 配置已保存。';
-        this.saveMessageType = 'success';
-      }
-    },
-
-    /**
-     * 返回 API 错误信息
-     */
-    showErrorMsg(error) {
-      let errorMessage = 'API 错误：';
-
-      if (error.response) {
-        switch (error.response.status) {
-          case 400:
-            errorMessage += '请求参数错误';
-            break;
-          case 401:
-            errorMessage += 'API密钥无效';
-            break;
-          case 402:
-            errorMessage += '账户余额不足或需要付费';
-            break;
-          case 403:
-            errorMessage += '访问被拒绝';
-            break;
-          case 404:
-            errorMessage += 'API端点不存在';
-            break;
-          case 429:
-            errorMessage += '请求过于频繁';
-            break;
-          case 500:
-            errorMessage += '服务器内部错误';
-            break;
-          case 503:
-            errorMessage += '服务暂时不可用';
-            break;
-          default:
-            errorMessage += `未知错误 (${error.response.status})`;
-        }
-      } else if (error.request) {
-        errorMessage += '无法连接到服务器';
-      } else {
-        errorMessage += '请求配置错误';
-      }
-
-      errorMessage += `（${error.message || '无详细信息'}）`;
-
-      this.errorMsg = errorMessage;
     }
-  }
-});
+  });
 </script>
